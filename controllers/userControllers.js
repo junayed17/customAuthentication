@@ -1,7 +1,10 @@
 const bcrypt = require("bcrypt");
+const mongoose=require("mongoose")
+const ObjectId=mongoose.Types.ObjectId
 const userModel = require("../models/userModel");
 const { passHash, passVarify } = require("../utils/password");
 const tokenGen = require("../utils/token");
+
 
 const signUp = async (req, res) => {
   const { username, email, password } = req.body;
@@ -46,4 +49,14 @@ const signIn = async (req, res) => {
   }
 };
 
-module.exports = { signUp, signIn };
+const profile=async(req,res)=>{
+  const {id}=req.params;
+  try {
+    const user=await userModel.findById(id)
+    res.send(user)
+  } catch (error) {
+    res.status(400).send({message:"something went wrong"})   ;
+  }
+}
+
+module.exports = { signUp, signIn,profile };
